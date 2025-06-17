@@ -1,0 +1,29 @@
+services:
+  mysql-server:
+    image: mysql:8.0.42
+    container_name: mysql-server
+    restart: unless-stopped 
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Set this in your .env file
+      MYSQL_USER: ${MYSQL_USER} # Set this in your .env file
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD} # Set this in your .env file
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql # Persist MySQL data
+
+  mysql-workbench:
+    image: lscr.io/linuxserver/mysql-workbench:latest
+    container_name: mysql-workbench
+    restart: unless-stopped
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - PUID=1000 
+      - PGID=1000 
+      - TZ=Etc/UTC # Change this to your timezone if needed
+    volumes:
+      - /path/to/config:/config # Change this to your desired config path if needed
+    ports:
+      - 3000:3000 
+      - 3001:3001
